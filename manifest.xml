@@ -1,10 +1,11 @@
 <package>
-  <description brief="matlab_bridge">
-
+  <description brief="dynopt_hw4">
 	  dynopt_hw4
-
   </description>
   <author>Tingfan Wu</author>
+  <author>Michael Shomin</author>
+  <author>Vishnu Desaraju</author>
+  <author>Ben Eckart</author>
   <license>BSD</license>
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/matlab_bridge</url>

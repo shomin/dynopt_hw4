@@ -15,6 +15,7 @@
   <depend package="geometry_msgs" />
   <depend package="sensor_msgs" />
   <depend package="osrf_msgs" />
+	<depend package="atlas_msgs" />
 
   <export>
     <rosjava-src location="src/main/java" />

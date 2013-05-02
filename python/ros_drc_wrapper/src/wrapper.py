@@ -6,12 +6,27 @@ from sensor_msgs.msg import JointState
 #from atlas_msgs.msg import AtlasState
 from std_msgs.msg import String
 
+from ros_drc_wrapper.srv import *
+
 from process import Process
 import time
 
+
+
   
-def launch(world_loc='/home/ben/atlas_cga.world', 
-           model_loc='/home/ben/Desktop/gz_walk_dynopt/gz_walking/models/atlas_cga/model2.urdf'):
+def launch(world_loc_='/home/ben/atlas_cga.world', 
+           model_loc_='/home/ben/Desktop/gz_walk_dynopt/gz_walking/models/atlas_cga/model2.urdf'):
+    rospy.init_node('ros_drc_wrapper_node')
+    
+    global world_loc, model_loc
+    world_loc, model_loc = world_loc_, model_loc_
+
+    s = rospy.Service('run_simulation', RunSimulation, run_simulation)
+    
+    print 'Simulation wrapper service started'
+    rospy.spin()
+    
+def run_simulation(req):
     ''' launch the ros node that calls gazebo using the appropriate world and urdf model 
 
     on the commandline, this command would look like this:
@@ -21,13 +36,12 @@ def launch(world_loc='/home/ben/atlas_cga.world',
     we grab the output of this node from stdout and analyze it
 
     '''
-    
-    pub = rospy.Publisher('final_torque_squared', String)
-    rospy.init_node('ros_drc_wrapper_node')
 
+    # req may contain a preset non-clashing gazebo simulation ID for parallel execution
     
     trqTotal = 0
 
+    global world_loc, model_loc
     cmd = "roslaunch atlas_utils atlas_cga.launch gzworld:=%s gzrobot:=%s" % (world_loc, model_loc)
 
     proc = Process(cmd.split(), stdout=True)
@@ -45,11 +59,13 @@ def launch(world_loc='/home/ben/atlas_cga.world',
         if line and line.startswith('=== END '): 
             print line
             print 'Total Torque Squared', trqTotal
-            pub.publish(String(str(trqTotal)))
             break
         
     print 'killing gazebo!'
-    proc.kill()
+    proc.kill()    
+    
+    return RunSimulationResponse(str(trqTotal))
+
 
 if __name__ == '__main__': 
     if len(sys.argv) > 2:

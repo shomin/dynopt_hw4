@@ -4,7 +4,7 @@ project(ros_drc_wrapper)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS rosbag roscpp rospy sensor_msgs std_msgs)
+find_package(catkin REQUIRED COMPONENTS rosbag roscpp rospy sensor_msgs std_msgs message_generation)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -20,24 +20,22 @@ find_package(catkin REQUIRED COMPONENTS rosbag roscpp rospy sensor_msgs std_msgs
 #######################################
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
+add_message_files(
+   FILES
+ )
 
 ## Generate services in the 'srv' folder
-# add_service_files(
-#   FILES
-#   Service1.srv
-#   Service2.srv
-# )
+add_service_files(
+   DIRECTORY srv 
+   FILES
+   RunSimulation.srv
+ )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   atlas_msgs#   osrf_msgs#   sensor_msgs#   std_msgs
-# )
+ generate_messages(
+   DEPENDENCIES
+   std_msgs
+ )
 
 ###################################
 ## catkin specific configuration ##
@@ -50,7 +48,7 @@ find_package(catkin REQUIRED COMPONENTS rosbag roscpp rospy sensor_msgs std_msgs
 catkin_package(
    INCLUDE_DIRS include
 #  LIBRARIES ros_drc_wrapper
-#  CATKIN_DEPENDS atlas_msgs osrf_msgs rosbag roscpp rospy sensor_msgs std_msgs
+  CATKIN_DEPENDS message_runtime rosbag roscpp rospy sensor_msgs std_msgs
 #  DEPENDS system_lib
 )
 
@@ -60,9 +58,9 @@ catkin_package(
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
-include_directories(include
-  ${catkin_INCLUDE_DIRS}
-)
+#include_directories(include
+#  ${catkin_INCLUDE_DIRS}
+#)
 
 ## Declare a cpp library
 # add_library(ros_drc_wrapper
@@ -74,7 +72,7 @@ include_directories(include
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
-# add_dependencies(ros_drc_wrapper_node ros_drc_wrapper_generate_messages_cpp)
+#add_dependencies(ros_drc_wrapper_node ros_drc_wrapper_generate_messages_cpp)
 
 ## Specify libraries to link a library or executable target against
 # target_link_libraries(ros_drc_wrapper_node
